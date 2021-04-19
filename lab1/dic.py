@@ -17,20 +17,22 @@ df['data_fim'] =  pd.to_datetime( df['Data_fim'] + ' ' + df['Horario_fim'], form
 
 # Filtrar os dados para o aluno 201510962 e sem motivo de expurgo
 df = df.loc[ (df.UC == 2548925) & df.Motivo_expurgo.isnull() , :]
+# df = df.loc[ (df.UC == 2285321) & df.Motivo_expurgo.isnull() , :]
 
 # Exemplo Mês Abril - UC 32542895:
 
 janeiro_começo = datetime.fromisoformat('2014-01-01')
-janeiro_fim = datetime.fromisoformat('2014-01-31')
+janeiro_fim = datetime.fromisoformat('2014-02-01')
 
 # dados_32542895 = df.query(f"UC == 2548925 & data_inicio > {abril_começo} & data_fim < {abril_fim}")
 sum_mes = []
 sum_result = []
-for i in range(1,13):
+for i in range(0,12):
     df[f"mes_{i}"] = 0
-    df.loc[  (df.data_inicio >=  janeiro_começo + relativedelta(months = i)) & (df.data_fim <= janeiro_fim + relativedelta(months = i)), f'mes_{i}' ] = (df.data_fim - df.data_inicio)/np.timedelta64(1, 'h')
+    df.loc[  (df.data_inicio >=  janeiro_começo + relativedelta(months = i)) & (df.data_fim <= janeiro_fim + relativedelta(months = i)), f'mes_{i}' ] = (df.data_fim - df.data_inicio) / np.timedelta64(1, 'h')
+    df.loc[  (df.data_inicio >=  janeiro_começo + relativedelta(months = i)) & (df.data_fim <= janeiro_fim + relativedelta(months = i)), f'mes_t_{i}' ] = (df.data_fim - df.data_inicio)
     sum_result.append(df.query(f'mes_{i} > 0' )[f'mes_{i}'].sum())
-    sum_mes.append(f"{i}/14")
+    sum_mes.append(f"{i + 1}/14")
 
 
 # fig, ax = plt.subplots()
